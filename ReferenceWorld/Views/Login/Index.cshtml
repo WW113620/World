@@ -1,0 +1,179 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Index";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>login</title>
+    <!-- custom-theme -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="~/Content/app.v2.css" type="text/css" rel="stylesheet" />
+    <link href="~/Content/search.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/layer/layer.js"></script>
+    <script src="~/Scripts/public.js"></script>
+    <style>
+        html,
+        body {
+            background: #000;
+            margin: 0;
+            padding: 0;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+
+        .registration-btn {
+            position: relative;
+            float: right;
+            margin-right: 35px;
+            margin-top: 40px;
+        }
+
+        .Searchtion {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            width: 90%;
+            margin-left: -45%;
+        }
+
+        .set-title {
+            text-align: center;
+            color: #58480c;
+            font-size: 20px;
+            font-family: 'HY NanGTJ';
+        }
+
+        .Searchtion a:hover {
+            color: #0b518c;
+        }
+    </style>
+</head>
+<body>
+    <canvas width="1251" height="920"></canvas>
+
+    <div class="Searchtion" id="Searchtion">
+        <div class="signin-form profile" style="border-radius: 3px;">
+            <a class="navbar-brand block set-title" href="#" style="width:100%;">Login to Referral World</a>
+            <div class="row login-form" style="margin-top: 35px;">
+                <input type="text" id="inputEmail" placeholder="Email" class="form-control">
+                <input type="password" id="inputPassword" placeholder="Password" maxlength="30" class="form-control">
+                <div class="tp" style="margin-top: 35px;">
+                    <input type="submit" value="Submit" id="loginInfo" />
+                    <div class="line line-dashed"></div>
+                    <p class="text-muted text-center"><small>Do not have an account?</small></p>
+                    <a href="@Url.Content("~/Login/Register")" class="btn btn-default btn-block">Create an account</a>
+                </div>
+            </div>
+        </div>
+        <div class="main-button-footer" style="margin-top: 90px;text-align: center;" title="Home">
+            <div class="col-sm-3" onclick="Home()" style="cursor:pointer;">
+                <i class="fa fa-3x fa-user"></i>
+                <h5 class="text-uc m-b m-t-lg">Home</h5>
+            </div>
+            <div class="col-sm-3" onclick="Search()" style="cursor:pointer;" title="Search">
+                <i class="fa fa-3x fa-search"></i>
+                <h5 class="text-uc m-b m-t-lg">Search</h5>
+            </div>
+            <div class="col-sm-3" onclick="About()" style="cursor:pointer;" title="About Us">
+                <i class="fa fa-globe fa-3x icon-muted"></i>
+                <h5 class="text-uc m-b m-t-lg">About Us</h5>
+            </div>
+            <div class="col-sm-3" onclick="Contact()" style="cursor:pointer;" title="Contact Us">
+                <i class="fa fa-envelope-o fa-3x icon-muted"></i>
+                <h5 class="text-uc m-b m-t-lg">Contact Us</h5>
+            </div>
+        </div>
+    </div>
+    <script src="~/Scripts/createCanvas.js"></script>
+</body>
+</html>
+<script>
+    $("#loginInfo").click(function () {
+        SubmitLogin();
+    });
+    var layTip = null;
+    function SubmitLogin() {
+        var inputEmail = trimString($("#inputEmail").val());
+        if (inputEmail == "") {
+            layTip = layer.tips('Email is required', '#inputEmail', { tips: [2, '#3595CC'] });
+            return false;
+        } else {
+            var isemail = isEmail(inputEmail);
+            if (isemail == false) {
+                layTip = layer.tips('Email format error', '#inputEmail', { tips: [2, '#3595CC'] });
+                return false;
+            }
+        }
+        var inputPassword = trimString($("#inputPassword").val());
+        if (inputPassword == "") {
+            layTip = layer.tips('Password is required', '#inputPassword', { tips: [2, '#3595CC'] });
+            return false;
+        } else {
+            var len = inputPassword.length;
+            if (len < 6) {
+                layTip = layer.tips('length must not be less than 6 ', '#inputPassword', { tips: [2, '#3595CC'] });
+                return false;
+            }
+        }
+
+        var isChecked = $("input[name='keeponlogin']:checked").length;
+        $.ajax({
+            url: "@Url.Content("~/Login/LoginValidator")",
+            data: {
+                username: $("#inputEmail").val(),
+                userpwd: $("#inputPassword").val(),
+                isChecked: isChecked
+            },
+            dataType: 'json', type: "POST",
+            success: function (result) {
+                if (result.errorCode == 200) {
+                    layer.msg("Login successfully", { time: 500, offset: ['38%', '46%'] }, function (index) {
+                        layer.close(index);
+                        window.location.href = "@Url.Content("~/Member/Index")";
+                    });
+                } else {
+                    $("#inputPassword").val("");
+                    layTip = layer.tips('Login Failed', '#inputPassword');
+                }
+            }
+        });
+    }
+
+    $("#inputEmail,#inputPassword,#keeponlog").focus(function () {
+        if (layTip) {
+            layer.close(layTip);
+        }
+    });
+
+    //enter
+    $("#inputPassword,#keeponlog").bind("keydown", function (event) {
+        var code = event.keycode ? parseInt(event.keycode) : parseInt(event.which);
+        if (isNaN(code)) return true;
+        if (code == 13) {
+            SubmitLogin();
+        }
+    });
+</script>
+<script>
+    function Home() {
+        window.location.href = "@Url.Content("~/Home/Index")";
+    }
+    function Search() {
+        window.location.href = "@Url.Content("~/Search/Index")";
+    }
+    function About() {
+        window.location.href = "@Url.Content("~/Home/About")";
+    }
+    function Contact() {
+        window.location.href = "@Url.Content("~/Home/Contact")";
+    }
+</script>

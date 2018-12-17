@@ -1,0 +1,377 @@
+﻿@model ReferenceWorld.Model.Member
+@using ReferenceWorld.Common;
+@{
+    Layout = null;
+    ViewBag.Title = "Index";
+    long userId = Model.Id;
+    string avatarUrl = Url.Content("~/Upload/Avatar/") + Model.HeadImage;
+}
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+    <meta charset="utf-8" />
+    <title>Member Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link href="~/Content/upload/bootstrap_old.min.css" rel="stylesheet" />
+    <link href="~/Content/app.v2.css" type="text/css" rel="stylesheet" />
+    <link href="~/Content/star.css" rel="stylesheet" />
+    <link href="~/Content/common.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <!--[if lt IE 9]>
+    <script src="~/Scripts/ie/html5shiv.js" cache="false"></script>
+    <script src="~/Scripts/ie/respond.min.js" cache="false"></script>
+    <script src="~/Scripts/ie/excanvas.js" cache="false"></script>
+    <![endif]-->
+    <script src="~/Scripts/layer/layer.js"></script>
+    <script src="~/Scripts/public.js"></script>
+    <style>
+        .text-font {
+            margin-top: 15px;
+            line-height: 30px;
+            font-size: 20px;
+            font-weight: bold;
+            font-family: -webkit-pictograph;
+        }
+
+        a.underline {
+            text-decoration: underline;
+        }
+
+            a.underline:hover {
+                color: #280eea;
+            }
+
+        .margin-top30 {
+            margin-top: 15px;
+        }
+
+        @@media (max-width: 500px) {
+            .member-center {
+                text-align: center;
+            }
+        }
+    </style>
+    <style>
+        .layui-layer-page .layui-layer-btn {
+            padding-top: 10px;
+            text-align: center;
+        }
+
+        .padding {
+            padding: 4px 3px;
+        }
+
+        .link_btn_ok, .link_btn_no {
+            padding: 2px 3px;
+            width: 80px;
+            margin-left: 20px;
+        }
+
+        .link_btn_no {
+            border: 1px #808080 solid;
+            border-radius: 2px;
+            background: #e2183c;
+        }
+
+            .link_btn_no:hover {
+                border: 1px #808080 solid;
+                border-radius: 2px;
+                background: #e2183c;
+            }
+
+        .margin15botton {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <section class="vbox">
+        @{Html.RenderAction("PartHeader", "Member"); }
+        <section class="overflowDiv">
+            <section class="hbox stretch">
+                <!-- .aside -->
+                <aside class="bg-light lter aside-md hidden-print" id="nav"></aside>
+                <!-- /.aside -->
+                <section id="content">
+                    <section class="vbox bg-white">
+                        <header class="header b-b b-light hidden-print">
+                            @if (Model.UserGuid == LoginHelper.UserGuid)
+                            {
+                                <p class="p-title-font">Introduction</p>
+                            }
+                            else
+                            {
+                                <p class="p-title-font"><a href="@Url.Content("~/Member/Index/")" class="underline">Member Profile</a></p>
+                            }
+
+
+                        </header>
+                        <section class="scrollable wrapper">
+                            <div class="row margin-top30">
+                                <div class="col-sm-3 col-xs-6 col-xs-12">
+                                    <i><img src="@avatarUrl" onerror="javascript: this.src = '@Url.Content("~/Images/default_img.jpg")';" alt="" style="width:140px;height:140px;" /></i>
+                                    <div style="margin-left: 15px;"><h2 class="h2-username">@Model.UserName</h2></div>
+                                </div>
+                                <div class="col-sm-3 col-xs-6 col-xs-12">
+                                    <div class="margin-top30">
+                                        <div class="padding5">
+                                            @if (Model != null && Model.Star > 0)
+                                            {
+                                                int star = Model.Star;
+                                                for (int i = 0; i < star; i++)
+                                                {
+                                                    <img src="@Url.Content("~/Images/heart.png")" style="width:20px;" />
+                                                }
+                                            }
+
+                                        </div>
+                                        <div class="padding5">
+                                            <a href="@Url.Content("~/Member/Testimony/"+Model.UserGuid)" class="underline title-link ">Testimony</a>
+                                        </div>
+                                        <div style="display:none;" class="padding5">
+                                            <a href="#" class="underline title-link ">References</a>
+                                        </div>
+                                        <div class="padding5">
+                                            <a href="@Url.Content("~/Member/Photos/"+Model.UserGuid)" class="underline title-link ">Photos</a>
+                                        </div>
+                                        <div class="padding5">
+                                            <a href="@Url.Content("~/Member/Team/"+Model.UserGuid)" class="underline title-link ">My Team</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="margin-top30">
+                                <div class="row">
+                                    <div class="col-sm-12 col-xs-12">
+                                        @{
+                                            var introduction = ViewBag.Introduction as ReferenceWorld.Model.Introduction;
+                                            if (introduction != null && !string.IsNullOrEmpty(introduction.Description))
+                                            {
+                                                if (Model.Email == LoginHelper.UserNameEmail)
+                                                {
+                                                    <section class="panel panel-default">
+                                                        <article class="media" style="padding:10px;">
+                                                            <div class="pull-left" style="margin: 12px 8px;"> <span class="fa-stack fa-lg" onclick="MyDescription()"> <i class="fa fa-circle fa-stack-2x text-info"></i> <i class="fa fa-pencil fa-stack-1x text-white"></i> </span> </div>
+                                                            <div class="media-body"><span class="block" style="font-size:16px;font-family: -webkit-pictograph;">@introduction.Description</span> <em class="text-xs">Posted on <span class="text-danger">@introduction.CreateTime.ToString("yyyy-MM-dd HH:mm")</span></em> </div>
+                                                        </article>
+                                                    </section>
+                                                }
+                                                else
+                                                {
+                                                    <section class="panel panel-default">
+                                                        <article class="media" style="padding:10px;">
+                                                            <div class="pull-left" style="margin: 12px 8px;"> <span class="fa-stack fa-lg"><i class="fa fa-circle fa-stack-2x text-info"></i> <i class="fa fa-file-text fa-stack-1x text-white"></i> </span> </div>
+                                                            <div class="media-body"><span class="block" style="font-size:16px;font-family: -webkit-pictograph;">@introduction.Description</span> <em class="text-xs">Posted on <span class="text-danger">@introduction.CreateTime.ToString("yyyy-MM-dd HH:mm")</span></em> </div>
+                                                        </article>
+                                                    </section>
+                                                }
+
+                                            }
+                                            else
+                                            {
+                                                if (Model.Email == LoginHelper.UserNameEmail)
+                                                {
+                                                    <section class="panel panel-default">
+                                                        <article class="media" style="padding:10px;">
+                                                            <div class="pull-left" style="margin: 12px 8px;"> <span class="fa-stack fa-lg" onclick="MyDescription()"> <i class="fa fa-circle fa-stack-2x text-info"></i> <i class="fa fa-pencil fa-stack-1x text-white"></i> </span> </div>
+                                                            <div class="media-body" style="padding-top: 12px;"><span class="block" style="font-size: 14px;font-family: cursive;">Your introduction is blank, please add your own profile...</span></div>
+                                                        </article>
+                                                    </section>
+                                                }
+                                                else
+                                                {
+                                                    <section class="panel panel-default">
+                                                        <article class="media" style="padding:10px;">
+                                                            <div class="pull-left" style="margin: 12px 8px;"> <span class="fa-stack fa-lg"> <i class="fa fa-circle fa-stack-2x text-info"></i> <i class="fa fa-file-text fa-stack-1x text-white"></i> </span> </div>
+                                                            <div class="media-body" style="padding-top: 12px;"><span class="block" style="font-size: 14px;font-family: cursive;">His introduction is blank...</span></div>
+                                                        </article>
+                                                    </section>
+                                                }
+                                            }
+                                            if (Model.Email != LoginHelper.UserNameEmail)
+                                            {
+                                                <section class="panel panel-default">
+                                                    <form>
+                                                        <textarea class="form-control no-border" rows="4" id="textarea-content" placeholder="What's your comment for this user?"></textarea>
+                                                    </form>
+                                                    <footer class="panel-footer bg-light lter">
+                                                        <button class="btn btn-info pull-right btn-sm" onclick="PostComment()">Comment</button>
+                                                        <ul class="nav nav-pills nav-sm">
+                                                            <li>
+                                                                <div id="xzw_starSys">
+                                                                    <div id="xzw_starBox">
+                                                                        <ul class="star" id="star">
+                                                                            <li><a href="javascript:void(0)" title="1" class="one-star">1</a></li>
+                                                                            <li><a href="javascript:void(0)" title="2" class="two-stars">2</a></li>
+                                                                            <li><a href="javascript:void(0)" title="3" class="three-stars">3</a></li>
+                                                                            <li><a href="javascript:void(0)" title="4" class="four-stars">4</a></li>
+                                                                            <li><a href="javascript:void(0)" title="5" class="five-stars">5</a></li>
+                                                                        </ul>
+                                                                        <div class="current-rating" id="showb"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <li><a href="#"></a></li>
+                                                        </ul>
+                                                    </footer>
+                                                </section>
+                                            }
+                                        }
+                                      
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="well m-t" style="margin-top: 70px;text-align: center;">
+                                <div class="row">
+                                    <div class="col-sm-3" onclick="Home()" style="cursor:pointer;" title="Home">
+                                        <i class="fa fa-3x fa-user"></i>
+                                        <h5 class="text-uc m-b m-t-lg">Home</h5>
+                                    </div>
+                                    <div class="col-sm-3" onclick="Search()" style="cursor:pointer;" title="Search">
+                                        <i class="fa fa-3x fa-search"></i>
+                                        <h5 class="text-uc m-b m-t-lg">Search</h5>
+                                    </div>
+                                    <div class="col-sm-3" onclick="About()" style="cursor:pointer;" title="About Us">
+                                        <i class="fa fa-globe fa-3x icon-muted"></i>
+                                        <h5 class="text-uc m-b m-t-lg">About Us</h5>
+                                    </div>
+                                    <div class="col-sm-3" onclick="Contact()" style="cursor:pointer;" title="Contact Us">
+                                        <i class="fa fa-envelope-o fa-3x icon-muted"></i>
+                                        <h5 class="text-uc m-b m-t-lg">Contact Us</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </section>
+                    <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a>
+                </section>
+                <aside class="bg-light lter aside-md hidden-print" id="nav"></aside>
+
+            </section>
+        </section>
+    </section>
+    <input type="hidden" value="@LoginHelper.UserGuid" id="LoginUserGuid" />
+</body>
+</html>
+<script>
+    function Home() {
+        window.location.href = "@Url.Content("~/Home/Index")";
+    }
+    function Search() {
+        window.location.href = "@Url.Content("~/Search/Index")";
+    }
+    function About() {
+        window.location.href = "@Url.Content("~/Home/About")";
+    }
+    function Contact() {
+        window.location.href = "@Url.Content("~/Home/Contact")";
+    }
+</script>
+<script>
+    var descriptionTemp = "";
+    //star
+    $(document).ready(function () {
+        var stepW = 24;
+        var description = new Array("1", "2", "3", "4", "5");
+        var stars = $("#star > li");
+        $("#showb").css("width", 0);
+        stars.each(function (i) {
+            $(stars[i]).click(function (e) {
+                var n = i + 1;
+                $("#showb").css({ "width": stepW * n });
+                descriptionTemp = description[i];
+                $(this).find('a').blur();
+                return stopDefault(e);
+                return descriptionTemp;
+            });
+        });
+
+    });
+    function stopDefault(e) {
+        if (e && e.preventDefault)
+            e.preventDefault();
+        else
+            window.event.returnValue = false;
+        return false;
+    };
+
+    function PostComment() {
+        var _content = $("textarea#textarea-content").val();
+        if (!_content) { _content = $("textarea#textarea-content").html(); }
+        if (!_content) { _content = $("textarea#textarea-content").text(); }
+        _content = trimString(_content);
+        if (_content == "") {
+            layer.tips('Comment is required ', '#textarea-content', { tips: [2, '#3595CC'] });
+            return false;
+        }
+        $.ajax({
+            url: "@Url.Content("~/Member/SubmitComment")",
+            data: {
+                userGuid: "@Model.UserGuid",
+                content: _content,
+                descriptionStar: descriptionTemp
+            },
+            dataType: 'json', type: "POST",
+            success: function (result) {
+                if (result.errorCode == 200) {
+                    window.location.reload();
+                } else {
+                    alert("add fail");
+                }
+            }
+        });
+    }
+    var layerTip = null;
+    var layerOpen = null;
+    function cancel() {
+        if (layerOpen != null)
+            layer.close(layerOpen);
+        if (layerTip != null)
+            layer.close(layerTip);
+    }
+    function MyDescription() {
+        layerOpen = layer.open({
+            type: 1
+       , title: false
+       , closeBtn: false
+       , area: ['400px', '250px;']
+       , shade: 0.5
+       , content: '<div style="padding: 20px 20px; line-height: 30px;font-weight: 300;color:#333;">'
+                 + '<div style="color: red;font-size: 15px;">My Own Introduction:</div>'
+                 + '<div class="padding" style="margin-top: 5px;"><textarea class="form-control" rows="5" id="textarea-description" placeholder="What are your words..." style="width: 350px;"></textarea></div>'
+                 + '<div class="center" style="margin-top: 15px;"><input type="button"  onclick="AddOk()" class="link_btn link_btn_ok" value="OK"/><input type="button" onclick="cancel()" class="link_btn link_btn_no" value="Cancel"/></div>'
+         + '</div>'
+        });
+    }
+    function AddOk() {
+        var _content = $("textarea#textarea-description").val();
+        if (!_content) { _content = $("textarea#textarea-description").html(); }
+        if (!_content) { _content = $("textarea#textarea-description").text(); }
+        _content = trimString(_content);
+        if (_content == "") {
+            layerTip = layer.tips('Description is required ', '#textarea-description', { tips: [2, '#3595CC'] });
+            return false;
+        }
+        var loginUserGuid = $("#LoginUserGuid").val();
+        if (loginUserGuid == "") {
+            window.location.href = "@Url.Content("~/Login/Index")";
+            return false;
+        }
+        $.ajax({
+            url: "@Url.Content("~/Member/AddMyDescription")",
+            data: {
+                userGuid: loginUserGuid,
+                description: _content
+            },
+            dataType: 'json', type: "POST",
+            success: function (result) {
+                if (result.errorCode == 200) {
+                    window.location.reload();
+                } else {
+                    alert("add fail");
+                }
+            }
+        });
+    }
+</script>

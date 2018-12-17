@@ -1,0 +1,130 @@
+﻿
+@{
+    Layout = null;
+    ViewBag.Title = "Index";
+}
+
+<!DOCTYPE html>
+<html lang="en" class="bg-dark">
+<head>
+    <meta charset="utf-8" />
+    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link href="~/Content/app.v2.css" type="text/css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <!--[if lt IE 9]>
+    <script src="~/Scripts/ie/html5shiv.js" cache="false"></script>
+    <script src="~/Scripts/ie/respond.min.js" cache="false"></script>
+    <script src="~/Scripts/ie/excanvas.js" cache="false"></script>
+    <![endif]-->
+    <script src="~/Scripts/layer/layer.js"></script>
+    <script src="~/Scripts/public.js"></script>
+</head>
+<body>
+    <section id="content" class="m-t-lg wrapper-md animated fadeInUp">
+        <div class="container aside-xxl">
+            <a class="navbar-brand block" href="#">Welcome To Reference World</a>
+            <section class="panel panel-default bg-white m-t-lg">
+                <header class="panel-heading text-center"> <strong>Sign in</strong> </header>
+                <div class="panel-body wrapper-lg">
+                    <div class="form-group">
+                        <label class="control-label">Email</label>
+                        <input type="text" id="inputEmail" placeholder="test@example.com" class="form-control input-lg">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Password</label>
+                        <input type="password" id="inputPassword" placeholder="Password" maxlength="20" class="form-control input-lg">
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="keeponlogin" id="keeponlogin" checked="checked">
+                            Keep me logged in
+                        </label>
+                    </div>
+                    <a href="#" class="pull-right m-t-xs" style="display:none;"><small>Forgot password?</small></a>
+                    <a href="#" onclick="SubmitLogin()" class="btn btn-block btn-primary" style="margin-top: 20px;">Sign in</a>
+                    <div class="line line-dashed"></div>
+                    <p class="text-muted text-center"><small>Do not have an account?</small></p>
+                    <a href="@Url.Content("~/Login/Register")" class="btn btn-default btn-block">Create an account</a>
+                </div>
+            </section>
+        </div>
+    </section>
+    <!-- footer -->
+    <footer id="footer">
+        <div class="text-center padder">
+            <p>
+                <small>
+                    Reference World on Web<br>
+                    &copy; 2017
+                </small>
+            </p>
+        </div>
+    </footer>
+    <!-- / footer -->
+    <script src="~/Scripts/app.v2.js"></script>
+    <!-- Bootstrap -->
+    <!-- App -->
+</body>
+</html>
+<script>
+    var layTip = null;
+    function SubmitLogin() {
+        var inputEmail = trimString($("#inputEmail").val());
+        if (inputEmail == "") {
+            layTip = layer.tips('Email is required', '#inputEmail', { tips: [2, '#3595CC'] });
+            return false;
+        } else {
+            var isemail = isEmail(inputEmail);
+            if (isemail == false) {
+                layTip = layer.tips('Email format error', '#inputEmail', { tips: [2, '#3595CC'] });
+                return false;
+            }
+        }
+        var inputPassword = trimString($("#inputPassword").val());
+        if (inputPassword == "") {
+            layTip = layer.tips('Password is required', '#inputPassword', { tips: [2, '#3595CC'] });
+            return false;
+        } else {
+            var len = inputPassword.length;
+            if (len < 6) {
+                layTip = layer.tips('length must not be less than 6 ', '#inputPassword', { tips: [2, '#3595CC'] });
+                return false;
+            }
+        }
+
+        var isChecked= $("input[name='keeponlogin']:checked").length;
+        $.ajax({
+            url: "@Url.Content("~/Login/LoginValidator")",
+            data: {
+                username: $("#inputEmail").val(),
+                userpwd: $("#inputPassword").val(),
+                isChecked: isChecked
+            },
+            dataType: 'json', type: "POST",
+            success: function (result) {
+                if (result.errorCode == 200) {
+                    window.location.href = "@Url.Content("~/home/index")";
+                } else {
+                    $("#inputPassword").val("");
+                    layTip = layer.tips('Login Failed', '#inputPassword');
+                }
+            }
+        });
+    }
+
+    $("#inputEmail,#inputPassword,#keeponlog").focus(function () {
+        if (layTip) {
+            layer.close(layTip);
+        }
+    });
+
+    //enter
+    $("#inputPassword,#keeponlog").bind("keydown", function (event) {
+        var code = event.keycode ? parseInt(event.keycode) : parseInt(event.which);
+        if (isNaN(code)) return true;
+        if (code == 13) {
+            SubmitLogin();
+        }
+    });
+</script>

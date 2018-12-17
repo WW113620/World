@@ -1,0 +1,38 @@
+﻿
+@model ReferenceWorld.Model.PartUserInfo
+@if (Model != null)
+{
+    <input type="hidden" value="@Model.UserGuid" id="hidLoginUserGuid" />
+    <header class="bg-dark dk header navbar navbar-fixed-top-xs">
+        <div class="navbar-header aside-md"> <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen" data-target="#nav"> <i class="fa fa-bars"></i> </a> <a href="#" class="navbar-brand" data-toggle="fullscreen"><img src="~/Images/log.png" class="m-r-sm"></a> <a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".nav-user"> <i class="fa fa-cog"></i> </a> </div>
+        <ul class="nav navbar-nav navbar-right hidden-xs nav-user">
+            <li class="">
+                <a href="#" class="dropdown-toggle dk" data-toggle="dropdown"> <i class="fa fa-bell"></i> <span class="badge badge-sm up bg-danger m-l-n-sm count">0</span> </a>
+                <section class="dropdown-menu aside-xl">
+                    <section class="panel bg-white">
+                        <header class="panel-heading b-light bg-light"> <strong>You have <span class="count">0</span> unread messages </strong> </header>
+                        <div class="list-group list-group-alt animated fadeInRight">
+
+                        </div>
+                    </section>
+                </section>
+            </li>
+            
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <span class="thumb-sm avatar pull-left">
+                        <img src="@Model.AvatarUrl" onerror="javascript: this.src = '@Url.Content("~/Images/default_img.jpg")';" alt="">
+                    </span> @Model.UserName <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu animated fadeInRight">
+                    <span class="arrow top"></span>
+                    <li> <a href="@Url.Action("Index", "PersonInfo", new RouteValueDictionary(new {Id = Model.UserGuid}))">Settings Avatar</a> </li>
+                    <li class="divider"></li>
+                    <li> <a href="@Url.Content("~/Login/LoginOut")">Logout</a> </li>
+                </ul>
+            </li>
+        </ul>
+    </header>
+    <script src="~/Scripts/app.v2.js"></script>
+}
+

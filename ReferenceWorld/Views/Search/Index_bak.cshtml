@@ -1,0 +1,157 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Search";
+}
+@{
+    bool isLogin = (bool)ViewBag.IsLogin;
+}
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>search</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link href="~/Content/app.v2.css" type="text/css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <style>
+        html,
+        body {
+            background: #000;
+            margin: 0;
+            padding: 0;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+        }
+
+        .registration-btn {
+            position: relative;
+            float: right;
+            margin-right: 35px;
+            margin-top: 40px;
+        }
+
+        #content {
+            position: absolute;
+            top: 16%;
+            left: 50%;
+            margin-left: -250px;
+            width: 500px;
+        }
+
+        .set-title {
+            font-size: 24px;
+            color: #adbece;
+        }
+
+        .container a:hover {
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas width="1251" height="920"></canvas>
+    <div style="text-align:center" class="registration-btn">
+        @if (isLogin)
+            {
+            <div>
+                <div onclick="LayOut()" style="cursor:pointer;">
+                    <i class="fa fa-3x fa-power-off"></i>
+                    <h5 class="m-b m-t-lg">Layout</h5>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div>
+                <div onclick="Register()" style="cursor:pointer;">
+                    <i class="fa fa-3x fa-users"></i>
+                    <h5 class="m-b m-t-lg">Register</h5>
+                </div>
+            </div>
+        }
+    </div>
+    <section id="content">
+        <div class="container aside-xxl">
+            <a class="navbar-brand block set-title" href="#">Search to Referral World</a>
+            <section class="panel panel-default bg-white m-t-lg">
+                <header class="panel-heading text-center"> <strong style="font-size: 20px;">Search</strong> </header>
+                <form id="ajaxForm">
+                    <div class="panel-body wrapper-lg">
+                        <div class="form-group">
+                            <label class="control-label">Keyword Search</label>
+                            <input type="text" id="Keyword" name="Keyword" placeholder="eg. keyword word" maxlength="60" class="form-control input-lg">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Person Search</label>
+                            <input type="text" id="Person" name="Person" placeholder="eg. person info" maxlength="60" class="form-control input-lg">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Company Search</label>
+                            <input type="text" id="Company" name="Company" placeholder="eg. company name" maxlength="60" class="form-control input-lg">
+                        </div>
+                        <div class="line line-dashed"></div>
+                        <a href="#" onclick="SubmitLogin()" class="btn btn-block btn-primary text-uc" style="margin-top: 20px;">Submit</a>
+                    </div>
+                </form>
+            </section>
+        </div>
+        <div class="main-button-footer" style="margin-top: 60px;text-align: center;">
+            @if (isLogin)
+            {
+                <div class="col-sm-3" onclick="Member()" style="cursor:pointer;">
+                    <i class="fa fa-3x fa-file-text-o"></i>
+                    <h5 class="text-uc m-b m-t-lg">Member Profile</h5>
+                </div>
+            }
+            else
+            {
+                <div class="col-sm-3" onclick="Login()" style="cursor:pointer;">
+                    <i class="fa fa-3x fa-user"></i>
+                    <h5 class="text-uc m-b m-t-lg">Login/Sign up</h5>
+                </div>
+            }
+            <div class="col-sm-3" onclick="Home()" style="cursor:pointer;">
+                <i class="fa fa-3x fa-user"></i>
+                <h5 class="text-uc m-b m-t-lg">Home</h5>
+            </div>
+            <div class="col-sm-3" onclick="About()" style="cursor:pointer;">
+                <i class="fa fa-globe fa-3x icon-muted"></i>
+                <h5 class="text-uc m-b m-t-lg">About Us</h5>
+            </div>
+            <div class="col-sm-3" onclick="Contact()" style="cursor:pointer;">
+                <i class="fa fa-envelope-o fa-3x icon-muted"></i>
+                <h5 class="text-uc m-b m-t-lg">Contact Us</h5>
+            </div>
+        </div>
+    </section>
+
+    <script src="~/Scripts/createCanvas.js"></script>
+</body>
+</html>
+<script>
+    function Member() {
+        window.location.href = "@Url.Content("~/Member/Index")";
+    }
+    function Login() {
+        window.location.href = "@Url.Content("~/Login/Index")";
+    }
+    function Home() {
+        window.location.href = "@Url.Content("~/Home/Index")";
+    }
+    function About() {
+        window.location.href = "@Url.Content("~/Home/About")";
+    }
+    function Contact() {
+        window.location.href = "@Url.Content("~/Home/Contact")";
+    }
+    function LayOut() {
+        window.location.href = "@Url.Content("~/Login/LoginOut")";
+    }
+    function Register() {
+        window.location.href = "@Url.Content("~/Login/Register")";
+    }
+</script>

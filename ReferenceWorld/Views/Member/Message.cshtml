@@ -1,0 +1,368 @@
+﻿@model ReferenceWorld.Model.Member
+@using ReferenceWorld.Common;
+@{
+    Layout = null;
+    ViewBag.Title = "Message";
+    long userId = Model.Id;
+    string avatarUrl = Url.Content("~/Upload/Avatar/") + Model.HeadImage;
+    string userGuid = (string)ViewBag.UserGuid;
+}
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+    <meta charset="utf-8" />
+    <title>message</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link href="~/Content/upload/bootstrap_old.min.css" rel="stylesheet" />
+    <link href="~/Content/app.v2.css" type="text/css" rel="stylesheet" />
+    <link href="~/Content/star.css" rel="stylesheet" />
+    <link href="~/Content/common.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <!--[if lt IE 9]>
+    <script src="~/Scripts/ie/html5shiv.js" cache="false"></script>
+    <script src="~/Scripts/ie/respond.min.js" cache="false"></script>
+    <script src="~/Scripts/ie/excanvas.js" cache="false"></script>
+    <![endif]-->
+    <script src="~/Scripts/layer/layer.js"></script>
+    <script src="~/Scripts/public.js"></script>
+    <style>
+        .text-font {
+            margin-top: 15px;
+            line-height: 30px;
+            font-size: 20px;
+            font-weight: bold;
+            font-family: -webkit-pictograph;
+        }
+
+        a.underline {
+            text-decoration: underline;
+        }
+
+            a.underline:hover {
+                color: #280eea;
+            }
+
+        a.underline-no:hover {
+            color: #280eea;
+        }
+
+        .margin-top30 {
+            margin-top: 30px;
+        }
+
+        #comments tr th {
+            font-size: 15px;
+        }
+    </style>
+    <style>
+        .layui-layer-page .layui-layer-btn {
+            padding-top: 10px;
+            text-align: center;
+        }
+
+        .padding {
+            padding: 4px 3px;
+        }
+
+        .radioleft {
+            margin-left: 30px;
+        }
+
+        .radioheight {
+            line-height: 38px;
+            height: 38px;
+        }
+        .link_btn_ok_agree {
+            padding: 2px 3px;
+            width: 80px;
+        }
+
+        .link_btn_ok, .link_btn_no {
+            padding: 2px 3px;
+            width: 80px;
+            margin-left: 20px;
+        }
+
+        .link_btn_no {
+            border: 1px #808080 solid;
+            border-radius: 2px;
+            background: #e2183c;
+        }
+
+            .link_btn_no:hover {
+                border: 1px #808080 solid;
+                border-radius: 2px;
+                background: #e2183c;
+            }
+
+        .margin15botton {
+            margin-bottom: 15px;
+        }
+
+        .panel-body .message-username {
+            font-size: 15px;
+            font-family: inherit;
+            font-weight: bold;
+        }
+
+        .panel-body .message-sendfrom {
+            font-weight: bold;
+            font-family: -webkit-pictograph;
+        }
+
+        .panel-body .message-username-lower {
+            font-size: 14px;
+            font-family: inherit;
+            font-weight: bold;
+        }
+
+        .chat-body .height24 {
+            height: 24px;
+        }
+    </style>
+</head>
+<body>
+
+    <section class="vbox">
+        @{Html.RenderAction("PartHeader", "Member"); }
+        <section class="overflowDiv">
+            <section class="hbox stretch">
+                <!-- .aside -->
+                <aside class="bg-light lter aside-md hidden-print" id="nav"></aside>
+                <!-- /.aside -->
+                <section id="content">
+                    <section class="vbox bg-white">
+                        <header class="header b-b b-light hidden-print">
+
+                            <p class="p-title-font"><a href="@Url.Content("~/Member/Index/" + userGuid)" class="underline">Member Profile</a></p>
+                        </header>
+                        <section class="scrollable wrapper">
+                            <div style="margin-top: 40px;">
+                                @{
+                                    var Messages = ViewBag.Messages as List<ReferenceWorld.Model.MessageEntity>;
+                                    for (int i = 0; i < Messages.Count; i++)
+                                    {
+                                        var item = Messages[i];
+                                        <div class="row">
+                                            <div class="col-xs-1"></div>
+
+                                            <div class="col-xs-10">
+                                                @if (item.SendType == 1)
+                                                {
+                                                    <article id="chat-id-1" class="chat-item left">
+                                                        <a href="@Url.Content("~/Member/Index/"+item.UserGuid)" class="pull-left thumb-sm avatar" title="@item.UserName"><img src="@item.HeadImage" onerror="javascript: this.src = '@Url.Content("~/Images/default_img.jpg")';" class="img-circle"></a>
+                                                        <section class="chat-body">
+                                                            <div class="panel b-light text-sm m-b-none">
+                                                                <div class="panel-body">
+                                                                    <a href="#" onclick="DeleteMessage('@item.Id')" class="pull-right"> <i class="fa fa-times icon-muted"></i></a>
+                                                                    <span class="arrow left"></span>
+                                                                    <p class="m-b-none"><span class="message-sendfrom">Message From:</span> <span class="message-username">@item.UserName</span></p>
+                                                                    <span class="arrow left"></span>
+                                                                    <p class="m-b-none">@item.Description</p>
+                                                                    <article class="comment-item" style="padding: 10px 5px 5px;">
+                                                                        <a class="pull-left thumb-sm m-r-md" style="width:60px;" title="@item.FriendUserName"> <img src="@item.FriendHeadImage" onerror="javascript: this.src = '@Url.Content("~/Images/default_img.jpg")';"> </a>
+                                                                        <section class="comment-body">
+                                                                            <header> <a href="@Url.Content("~/Member/Index/"+item.FromUserGuid)" title="@item.FriendUserName"><strong>@item.FriendUserName </strong></a> <span class="text-muted text-xs"> @item.FriendCompany </span> </header>
+                                                                            <div><a href="#" onclick="Follow('@item.FriendGuid','@item.FriendUserName')" class="btn btn-xs btn-success m-t-xs m-l-xs height24">Follow</a></div>
+                                                                        </section>
+                                                                    </article>
+                                                                </div>
+
+                                                            </div>
+                                                            <small class="text-muted"><i class="fa fa-ok text-success"></i></small>
+                                                        </section>
+
+                                                    </article>
+                                                }
+                                                else if (item.SendType == 0)
+                                                {
+                                                    <article id="chat-id-1" class="chat-item left">
+                                                        <a href="@Url.Content("~/Member/Index/"+item.UserGuid)" class="pull-left thumb-sm avatar" title="@item.UserName"><img src="@item.HeadImage" onerror="javascript: this.src = '@Url.Content("~/Images/default_img.jpg")';" class="img-circle"></a>
+                                                        <section class="chat-body">
+                                                            <div class="panel b-light text-sm m-b-none">
+                                                                <div class="panel-body">
+                                                                    <a href="#" onclick="DeleteMessage('@item.Id')" class="pull-right"> <i class="fa fa-times icon-muted"></i></a>
+                                                                    <span class="arrow left"></span>
+                                                                    <p class="m-b-none"><span class="message-sendfrom">Message From:</span> <span class="message-username">@item.UserName</span></p>
+                                                                    <span class="arrow left"></span>
+                                                                    <p class="m-b-none">@item.Description</p>
+
+                                                                </div>
+                                                            </div>
+                                                            <small class="text-muted"><i class="fa fa-ok text-success"></i></small>
+                                                        </section>
+
+                                                    </article>
+                                                }
+                                                else if (item.SendType == 2)
+                                                {
+                                                    <article id="chat-id-1" class="chat-item left">
+                                                        <a href="@Url.Content("~/Member/Index/"+item.UserGuid)" class="pull-left thumb-sm avatar" title="@item.UserName"><img src="@item.HeadImage" onerror="javascript: this.src = '@Url.Content("~/Images/default_img.jpg")';" class="img-circle"></a>
+                                                        <section class="chat-body">
+                                                            <div class="panel b-light text-sm m-b-none">
+                                                                <div class="panel-body">
+                                                                    <a href="#" onclick="DeleteMessage('@item.Id')" class="pull-right"> <i class="fa fa-times icon-muted"></i></a>
+                                                                    <span class="arrow left"></span>
+                                                                    <p class="m-b-none"><span class="message-sendfrom">Message From:</span> <span class="message-username">@item.UserName</span></p>
+                                                                    <span class="arrow left"></span>
+                                                                    <p class="m-b-none"><span class="message-username-lower">@item.UserName</span> want to follow you as a friend ?  <a href="#" class="btn btn-xs btn-success m-t-xs m-l-xs height24" onclick="DoAgree('@item.Id','@item.FromUserGuid','@item.ToUserGuid','@item.UserName','@LoginHelper.UserName')"> Do you agree? </a> </p>
+                                                                </div>
+                                                            </div>
+                                                            <small class="text-muted"><i class="fa fa-ok text-success"></i></small>
+                                                        </section>
+
+                                                    </article>
+                                                }
+                                            </div>
+
+                                            <div class="col-xs-1"></div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                            <div class="well m-t" style="margin-top: 70px;text-align: center;">
+                                <div class="row">
+                                    <div class="col-sm-3" onclick="Home()" style="cursor:pointer;" title="Home">
+                                        <i class="fa fa-3x fa-user"></i>
+                                        <h5 class="text-uc m-b m-t-lg">Home</h5>
+                                    </div>
+                                    <div class="col-sm-3" onclick="Search()" style="cursor:pointer;" title="Search">
+                                        <i class="fa fa-3x fa-search"></i>
+                                        <h5 class="text-uc m-b m-t-lg">Search</h5>
+                                    </div>
+                                    <div class="col-sm-3" onclick="About()" style="cursor:pointer;" title="About Us">
+                                        <i class="fa fa-globe fa-3x icon-muted"></i>
+                                        <h5 class="text-uc m-b m-t-lg">About Us</h5>
+                                    </div>
+                                    <div class="col-sm-3" onclick="Contact()" style="cursor:pointer;" title="Contact Us">
+                                        <i class="fa fa-envelope-o fa-3x icon-muted"></i>
+                                        <h5 class="text-uc m-b m-t-lg">Contact Us</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </section>
+                    <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a>
+
+                </section>
+                <aside class="bg-light lter aside-md hidden-print" id="nav"></aside>
+
+            </section>
+        </section>
+
+    </section>
+    <input type="hidden" value="@ViewBag.UserGuid" id="hidUserGuid" />
+
+</body>
+</html>
+<script>
+    function Home() {
+        window.location.href = "@Url.Content("~/Home/Index")";
+    }
+    function Search() {
+        window.location.href = "@Url.Content("~/Search/Index")";
+    }
+    function About() {
+        window.location.href = "@Url.Content("~/Home/About")";
+    }
+    function Contact() {
+        window.location.href = "@Url.Content("~/Home/Contact")";
+    }
+</script>
+<script>
+    var layerOpen = null;
+    function Follow(userGuid, userName) {
+        var myGuid = trimString($("#hidUserGuid").val());
+        if (trimString(userGuid) == myGuid) {
+            alert(" You can't follow yourself as your friend");
+            return false;
+        }
+        layerOpen = layer.open({
+            type: 1
+            , title: false
+            , closeBtn: false
+            , area: ['380px', '150px;']
+            , shade: 0.5
+            , content: '<div style="padding: 20px 20px 10px 20px; line-height: 30px;font-weight: 300;color:#333;">'
+                      + '<div style="text-indent: 2em;font-size: 15px;">Do you want to follow 【' + userName + '】 as your friend ?</div>'
+                      + '<div class="center" style="margin-top: 10px;"><input type="button"  onclick="FollowOK(\'' + userGuid + '\')" class="link_btn link_btn_ok" value="OK"/><input type="button" onclick="cancel()" class="link_btn link_btn_no" value="Cancel"/></div>'
+              + '</div>'
+        });
+    }
+
+    function cancel() {
+        if (layerOpen != null)
+            layer.close(layerOpen);
+    }
+
+    function FollowOK(userGuid) {
+        cancel();
+        var myGuid = $("#hidUserGuid").val();
+        $.ajax({
+            url: "@Url.Content("~/Search/FollowFriends")",
+            data: { "userGuid": userGuid, "myGuid": myGuid },
+            dataType: 'json', type: "POST",
+            success: function (result) {
+                if (result.errorCode == 200) {
+                    alert("send follow message successfully")
+                }
+                else if (result.errorCode == 300) {
+                    alert("He is already your friend,don't need follow")
+                }
+                else {
+                    alert("follow fail");
+                }
+            }
+        });
+    }
+    function DeleteMessage(id) {
+        $.ajax({
+            url: "@Url.Content("~/Member/DeleteMessage")",
+            data: { "id": id },
+            dataType: 'json', type: "POST",
+            success: function (result) {
+                if (result.errorCode == 200) {
+                    window.location.reload();
+                }
+                else {
+                    alert("delete fail");
+                }
+            }
+        });
+    }
+</script>
+<script>
+    var layerAgree = null;
+    function DoAgree(Id,MyGuid, FriendGuid, userName,loginName) {
+        layerAgree = layer.open({
+            type: 1
+                , title: false
+                , closeBtn: false
+                , area: ['380px', '125px;']
+                , shade: 0.5
+                , content: '<div style="padding: 20px; line-height: 30px;font-weight: 300;color:#333;">'
+                          + '<div style="text-indent: 2em;font-size: 15px;">Do you agree 【' + userName + '】as your friend ?</div>'
+                          + '<div class="center" style="margin-top: 20px;"><input type="button"  onclick="SetAgree(\'' + Id + '\',\'' + MyGuid + '\',\'' + FriendGuid + '\',\'' + loginName + '\',0)" class="link_btn link_btn_ok_agree" value="OK"/><input type="button" onclick="SetAgree(\'' + Id + '\',\'' + MyGuid + '\',\'' + FriendGuid + '\',\'' + loginName + '\',1)" class="link_btn link_btn_no btn-danger" value="Refuse"/> <input type="button" onclick="cancelBtn()" class="link_btn link_btn_no" value="Cancel"/></div>'
+                  + '</div>'
+        });
+    }
+
+    function SetAgree(Id, MyGuid, FriendGuid, loginName, type) {
+        if (layerAgree != null)
+            layer.close(layerAgree);
+
+        $.ajax({
+            url: "@Url.Content("~/Search/SetAgreeMessage")",
+            data: { "Id": Id, "MyGuid": MyGuid, "FriendGuid": FriendGuid, "loginName":loginName,"type": type },
+            dataType: 'json', type: "POST",
+            success: function (result) {
+                window.location.reload();
+            }
+        });
+    }
+    function cancelBtn()
+    {
+        if (layerAgree != null)
+            layer.close(layerAgree);
+    }
+</script>

@@ -1,0 +1,36 @@
+﻿.p-title-font, .p-title-font a {
+    font-size: 16px;
+    font-family: 'HY NanGTJ';
+}
+
+h2.h2-username {
+    font-size: 28px;
+    font-family: 'HY NanGTJ';
+    font-weight: bold;
+}
+
+div .padding5 {
+    padding: 3px 0px;
+}
+
+a.title-link {
+    font-size: 16px;
+    font-family: 'HY NanGTJ';
+}
+
+a.delete-upload-pic {
+    width: 180px;
+    font-size: 12px;
+    font-family: -webkit-pictograph;
+}
+
+#comments-table.table th {
+    font-size: 20px;
+    font-family: -webkit-pictograph;
+    font-weight: bold;
+}
+
+#comments-table.table tr td {
+    font-size: 18px;
+    font-family: unset;
+}

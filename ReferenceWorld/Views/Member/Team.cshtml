@@ -1,0 +1,298 @@
+﻿@model ReferenceWorld.Model.Member
+@using ReferenceWorld.Common;
+@{
+    Layout = null;
+    ViewBag.Title = "Team";
+    long userId = Model.Id;
+    string avatarUrl = Url.Content("~/Upload/Avatar/") + Model.HeadImage;
+    string userGuid = (string)ViewBag.UserGuid;
+}
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+    <meta charset="utf-8" />
+    <title>Team</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link href="~/Content/upload/bootstrap_old.min.css" rel="stylesheet" />
+    <link href="~/Content/app.v2.css" type="text/css" rel="stylesheet" />
+    <link href="~/Content/star.css" rel="stylesheet" />
+    <link href="~/Content/common.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <!--[if lt IE 9]>
+    <script src="~/Scripts/ie/html5shiv.js" cache="false"></script>
+    <script src="~/Scripts/ie/respond.min.js" cache="false"></script>
+    <script src="~/Scripts/ie/excanvas.js" cache="false"></script>
+    <![endif]-->
+    <script src="~/Scripts/layer/layer.js"></script>
+    <script src="~/Scripts/public.js"></script>
+    <style>
+        .text-font {
+            margin-top: 15px;
+            line-height: 30px;
+            font-size: 20px;
+            font-weight: bold;
+            font-family: -webkit-pictograph;
+        }
+
+        a.underline {
+            text-decoration: underline;
+        }
+
+            a.underline:hover {
+                color: #280eea;
+            }
+
+        a.underline-no:hover {
+            color: #280eea;
+        }
+
+        .margin-top30 {
+            margin-top: 30px;
+        }
+
+        #comments tr th {
+            font-size: 15px;
+        }
+    </style>
+    <style>
+        .layui-layer-page .layui-layer-btn {
+            padding-top: 10px;
+            text-align: center;
+        }
+
+        .padding {
+            padding: 4px 3px;
+        }
+
+        .radioleft {
+            margin-left: 30px;
+        }
+
+        .radioheight {
+            line-height: 38px;
+            height: 38px;
+        }
+
+        .link_btn_ok, .link_btn_no {
+            padding: 2px 3px;
+            width: 80px;
+            margin-left: 20px;
+        }
+
+        .link_btn_no {
+            border: 1px #808080 solid;
+            border-radius: 2px;
+            background: #e2183c;
+        }
+
+            .link_btn_no:hover {
+                border: 1px #808080 solid;
+                border-radius: 2px;
+                background: #e2183c;
+            }
+
+        .margin15botton {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <section class="vbox overflowDiv">
+        @{Html.RenderAction("PartHeader", "Member"); }
+        <section>
+            <section class="hbox stretch">
+                <!-- .aside -->
+                <aside class="bg-light lter aside-md hidden-print" id="nav"></aside>
+                <!-- /.aside -->
+                <section id="content">
+                    <section class="vbox bg-white">
+                        <header class="header b-b b-light hidden-print">
+
+                            <p class="p-title-font"><a href="@Url.Content("~/Member/Index/" + userGuid)" class="underline">Member Profile</a></p>
+                        </header>
+                        <section class="scrollable wrapper">
+                            <div class="row margin-top30 div_avatar">
+
+                                @{
+                                    var teams = ViewBag.Teams as List<ReferenceWorld.Model.User>;
+                                    for (int i = 0; i < teams.Count; i++)
+                                    {
+                                        var item = teams[i];
+                                        <div class="col-lg-6 col-xs-12">
+                                            <div class="thumbnail m-b-sm" style="margin-left:6%;">
+                                                <div class="clearfix m-t-sm">
+                                                    <a href="#" class="pull-left thumb m-r"> <img src="@item.HeadImage" onerror="javascript: this.src = '@Url.Content("~/Images/default_img.jpg")';" class="img-circle"> </a>
+                                                    <div class="clear">
+                                                        <div class="h3 m-t-xs m-b-xs"><a class="underline-no" href="@Url.Content("~/Member/Index/"+item.UserGuid)">@item.UserName</a></div>
+                                                        <small class="text-muted"><i class="fa fa-map-marker"></i> @item.Address</small>
+                                                    </div>
+                                                </div>
+                                                @if (Model.Email == LoginHelper.UserNameEmail)
+                                                {
+                                                    <div class="btn-group btn-group-justified m-b m-t">
+                                                        <a class="btn btn-primary btn-rounded" href="#" onclick="Recommend('@item.UserName','@item.UserGuid','@userGuid')"> <i class="fa fa-eye"></i> Recommend </a>
+                                                        <a class="btn btn-dark btn-rounded" href="#" onclick="Chat('@item.UserName','@item.UserGuid','@userGuid')"> <i class="fa fa-comment-o"></i> Chat </a>
+                                                    </div>
+                                                }
+                                                
+
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                            </div>
+
+                            <div class="well m-t" style="margin-top: 70px;text-align: center;">
+                                <div class="row">
+                                    <div class="col-sm-3" onclick="Home()" style="cursor:pointer;" title="Home">
+                                        <i class="fa fa-3x fa-user"></i>
+                                        <h5 class="text-uc m-b m-t-lg">Home</h5>
+                                    </div>
+                                    <div class="col-sm-3" onclick="Search()" style="cursor:pointer;" title="Search">
+                                        <i class="fa fa-3x fa-search"></i>
+                                        <h5 class="text-uc m-b m-t-lg">Search</h5>
+                                    </div>
+                                    <div class="col-sm-3" onclick="About()" style="cursor:pointer;" title="About Us">
+                                        <i class="fa fa-globe fa-3x icon-muted"></i>
+                                        <h5 class="text-uc m-b m-t-lg">About Us</h5>
+                                    </div>
+                                    <div class="col-sm-3" onclick="Contact()" style="cursor:pointer;" title="Contact Us">
+                                        <i class="fa fa-envelope-o fa-3x icon-muted"></i>
+                                        <h5 class="text-uc m-b m-t-lg">Contact Us</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </section>
+                    <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a>
+
+                </section>
+                <aside class="bg-light lter aside-md hidden-print" id="nav"></aside>
+
+            </section>
+        </section>
+
+    </section>
+    <input type="hidden" value="@ViewBag.UserGuid" id="hidUserGuid" />
+
+</body>
+</html>
+<script>
+    function Home() {
+        window.location.href = "@Url.Content("~/Home/Index")";
+    }
+    function Search() {
+        window.location.href = "@Url.Content("~/Search/Index")";
+    }
+    function About() {
+        window.location.href = "@Url.Content("~/Home/About")";
+    }
+    function Contact() {
+        window.location.href = "@Url.Content("~/Home/Contact")";
+    }
+</script>
+<script>
+    var layerOpen = null;
+    function cancel() {
+        if (layerOpen != null)
+            layer.close(layerOpen);
+    }
+
+    function Recommend(userName, friendGuid, myGuid) {
+        var htmlOption = InitOption(friendGuid, myGuid);
+        layerOpen = layer.open({
+            type: 1
+      , title: false
+      , closeBtn: false
+      , area: ['400px', '280px;']
+      , shade: 0.5
+      , content: '<div style="padding: 20px 25px; line-height: 30px;font-weight: 300;color:#333;">'
+                + '<div class="margin15botton" style="color: red;font-size: 15px;">Recommend【' + userName + '】to other friends </div>'
+                + '<div class="padding margin15botton">Choose a friend：<select class="form-control" style="width:200px;float: right;margin-right:20px;" id="optionGuidList">' + htmlOption + '</select></div>'
+                + '<div class="padding margin15botton"><textarea class="form-control" rows="3" id="textarea-description" placeholder="What are your description..." style="width: 325px;"></textarea></div>'
+                + '<div class="padding center"><input type="button" onclick="RecommendOK(\'' + friendGuid + '\',\'' + myGuid + '\')" class="link_btn link_btn_ok" value="OK"/><input type="button" onclick="cancel()" class="link_btn link_btn_no" value="Cancel"/></div>'
+        + '</div>'
+        });
+    }
+    function InitOption(friendGuid, myGuid) {
+        var html = "";
+        $.ajax({
+            url: "@Url.Content("~/Member/GetFriendsList")",
+            data: { "friendGuid": friendGuid, "myGuid": myGuid },
+            dataType: 'json', type: "POST", async: false,
+            success: function (result) {
+                if (result.errorCode == 200) {
+                    for (var i = 0; i < result.data.length; i++) {
+                        var item = result.data[i];
+                        html += '<option value="' + item.UserGuid + '">' + item.UserName + '</option>';
+                    }
+                }
+            }
+        });
+        return html;
+    }
+    function Chat(userName, friendGuid, myGuid) {
+        layerOpen = layer.open({
+            type: 1
+      , title: false
+      , closeBtn: false
+      , area: ['380px', '230px;']
+      , shade: 0.5
+      , content: '<div style="padding: 20px 20px; line-height: 30px;font-weight: 300;color:#333;">'
+                + '<div style="color: red;font-size: 15px;">Send messages to【' + userName + '】</div>'
+                + '<div class="padding" style="margin-top: 5px;"><textarea class="form-control" rows="4" id="textarea-content" placeholder="What are your words..." style="width: 330px;"></textarea></div>'
+                + '<div class="center" style="margin-top: 20px;"><input type="button"  onclick="ChatOK(\'' + friendGuid + '\',\'' + myGuid + '\')" class="link_btn link_btn_ok" value="OK"/><input type="button" onclick="cancel()" class="link_btn link_btn_no" value="Cancel"/></div>'
+        + '</div>'
+        });
+    }
+
+    function RecommendOK(friendGuid, myGuid) {
+        var _content = $("textarea#textarea-description").val();
+        if (!_content) { _content = $("textarea#textarea-description").html(); }
+        if (!_content) { _content = $("textarea#textarea-description").text(); }
+        _content = trimString(_content);
+        var selectGuid = $("#optionGuidList").val();
+        SendMessages(1, myGuid, friendGuid, selectGuid, _content);
+    }
+    function ChatOK(friendGuid, myGuid) {
+        var _content = $("textarea#textarea-content").val();
+        if (!_content) { _content = $("textarea#textarea-content").html(); }
+        if (!_content) { _content = $("textarea#textarea-content").text(); }
+        _content = trimString(_content);
+        if (_content == "") {
+            cancel();
+        } else {
+            SendMessages(0, myGuid, friendGuid, "", _content);
+        }
+
+    }
+    function SendMessages(type, fromGuid, toGuid, selectGuid, description) {
+        $.ajax({
+            url: "@Url.Content("~/Member/SendMessages")",
+            data: { "type": type, "fromGuid": fromGuid, "toGuid": toGuid, "selectGuid": selectGuid, "description": description },
+            dataType: 'json', type: "POST",
+            success: function (result) {
+                if (result.errorCode == 200) {
+                    SendEmail(toGuid, description);
+                    cancel();
+                }
+                else {
+                    alert("send fail");
+                }
+            }
+        });
+    }
+
+    function SendEmail(toGuid, description) {
+        $.ajax({
+            url: "@Url.Content("~/Member/SendEmailMessage")",
+            data: {"toGuid": toGuid,"description": description },
+            dataType: 'json', type: "POST",
+            success: function (result) {
+               
+            }
+        });
+    }
+</script>

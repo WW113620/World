@@ -1,0 +1,274 @@
+﻿
+@{
+    Layout = null;
+    ViewBag.Title = "Register";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>register</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/app.v2.css" type="text/css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <!--[if lt IE 9]>
+    <script src="~/Scripts/ie/html5shiv.js" cache="false"></script>
+    <script src="~/Scripts/ie/respond.min.js" cache="false"></script>
+    <script src="~/Scripts/ie/excanvas.js" cache="false"></script>
+    <![endif]-->
+    <script src="~/Scripts/layer/layer.js"></script>
+    <script src="~/Scripts/public.js"></script>
+    <style>
+        html,
+        body {
+            background: #000;
+            margin: 0;
+            padding: 0;
+        }
+
+        canvas {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        #content {
+            position: absolute;
+            top: 5%;
+            left: 50%;
+            margin-left: -230px;
+            width: 460px;
+        }
+
+        .set-title {
+            color: #adbece;
+            font-family: 'HY NanGTJ';
+        }
+
+        .container a:hover {
+            color: #fff;
+        }
+
+    </style>
+    <style>
+        .form-control {
+            display: inline-block;
+            width: 80%;
+        }
+
+        .control-label {
+            width: 68px;
+        }
+
+        .label-margin10 {
+            margin-bottom: 0px;
+            margin-top: 5px;
+        }
+
+        .input-margin-top10 {
+            margin-top: -20px;
+        }
+    </style>
+</head>
+<body>
+    <canvas width="1251" height="920"></canvas>
+    <section id="content" class="m-t-lg">
+        <div class="container aside-xxl">
+            <a class="navbar-brand block set-title" href="#">Register to Referral World</a>
+            <section class="panel panel-default m-t-lg bg-white">
+
+                <header class="panel-heading text-center"> <strong>Person Sign Up</strong> </header>
+                <form class="panel-body wrapper-lg">
+                    <div class="form-group">
+                        <label class="control-label">User Type </label> 
+                        <select class="form-control input-lg" id="SelectUserType">
+                            <option value="0" selected="selected">Person</option>
+                            <option value="1">Company</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">First Name</label>
+                        <input type="text" placeholder="eg. Your First Name" id="FirstName" class="form-control input-lg">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Last Name</label>
+                        <input type="text" placeholder="eg. Your Last Name" id="LastName" class="form-control input-lg">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Username</label>
+                        <input type="text" placeholder="eg. Your name or team name" id="Username" class="form-control input-lg">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Email</label>
+                        <input type="email" placeholder="test@example.com" id="inputEmail" class="form-control input-lg">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Password</label>
+                        <input type="password" placeholder="Your password" id="inputPassword" class="form-control input-lg">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label label-margin10">Confirm password</label>
+                        <input type="password" placeholder="Confirm password" id="repeatPassword" class="form-control input-lg input-margin-top10">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Address：</label>
+                        <input type="text" placeholder="London, UK" id="inputAddress" class="form-control input-lg">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Company</label>
+                        <input type="text" placeholder="Neosoft company" id="inputCompany" class="form-control input-lg">
+                    </div>
+                    <div class="checkbox" style="display:none;">
+                        <label>
+                            <input type="checkbox">
+                            Agree the <a href="#">terms and policy</a>
+                        </label>
+                    </div>
+                    <a href="#" onclick="SubmitRegister()" class="btn btn-block btn-primary" style="margin-top: 30px;">Sign up</a>
+                    <div class="line line-dashed"></div>
+                    <p class="text-muted text-center"><small>Already have an account?</small></p>
+                    <a href="@Url.Content("~/Login/Index")" class="btn btn-default btn-block">Sign in</a>
+                </form>
+            </section>
+        </div>
+    </section>
+    <script src="~/Scripts/app.v2.js"></script>
+    <script src="~/Scripts/createCanvas.js"></script>
+</body>
+</html>
+<script>
+    $("#SelectUserType").change(function () {
+        var value = parseInt($(this).val());
+        if (value == 1) {
+            window.location.href = "@Url.Content("~/Login/CRegister")";
+        }
+        else {
+            return false;
+        }
+    });
+    var layTip = null;
+    function SubmitRegister() {
+        var FirstName = trimString($("#FirstName").val());
+        if (FirstName == "") {
+            layTip = layer.tips('First Name is required', '#FirstName', { tips: [2, '#3595CC'] });
+            return false;
+        }
+        var LastName = trimString($("#LastName").val());
+        if (LastName == "") {
+            layTip = layer.tips('Last Name is required', '#LastName', { tips: [2, '#3595CC'] });
+            return false;
+        }
+        var Username = trimString($("#Username").val());
+        if (Username == "") {
+            layTip = layer.tips('Username is required', '#Username', { tips: [2, '#3595CC'] });
+            return false;
+        }
+        else {
+            var isExistUsername = isExistValue(Username, 1);
+            if (isExistUsername == true) {
+                layTip = layer.tips('Username is existed', '#Username', { tips: [2, '#3595CC'] });
+                return false;
+            }
+        }
+        var inputEmail = trimString($("#inputEmail").val());
+        if (inputEmail == "") {
+            layTip = layer.tips('Email is required', '#inputEmail', { tips: [2, '#3595CC'] });
+            return false;
+        }
+        else {
+            var isemail = isEmail(inputEmail);
+            if (isemail == false) {
+                layTip = layer.tips('Email format error', '#inputEmail', { tips: [2, '#3595CC'] });
+                return false;
+            } else {
+                var isExistEmail = isExistValue(inputEmail, 2);
+                if (isExistEmail == true) {
+                    layTip = layer.tips('Email is existed', '#inputEmail', { tips: [2, '#3595CC'] });
+                    return false;
+                }
+            }
+        }
+        var inputPassword = trimString($("#inputPassword").val());
+        if (inputPassword == "") {
+            layTip = layer.tips('Password is required', '#inputPassword', { tips: [2, '#3595CC'] });
+            return false;
+        } else {
+            var len = inputPassword.length;
+            if (len < 6) {
+                layTip = layer.tips('length must not be less than 6 ', '#inputPassword', { tips: [2, '#3595CC'] });
+                return false;
+            }
+            else {
+                var repeatPassword = trimString($("#repeatPassword").val());
+                if (repeatPassword == "") {
+                    layTip = layer.tips('Repeat password is required', '#repeatPassword', { tips: [2, '#3595CC'] });
+                    return false;
+                }
+                else if (inputPassword != repeatPassword) {
+                    layTip = layer.tips('Two passwords are not equal', '#repeatPassword', { tips: [2, '#3595CC'] });
+                    return false;
+                }
+            }
+        }
+        var inputAddress = $("#inputAddress").val();
+        var inputCompany = $("#inputCompany").val();
+        $.ajax({
+            url: "@Url.Content("~/Login/RegisterValidator")",
+            data: {
+                FirstName: FirstName,
+                LastName: LastName,
+                UserName: Username,
+                Email: inputEmail,
+                Password: inputPassword,
+                Address: inputAddress,
+                Company: inputCompany
+            },
+            dataType: 'json', type: "POST",
+            success: function (result) {
+                if (result.errorCode == 200) {
+                    layer.msg("Register successfully", { time: 800, offset: ['50%', '46%'] }, function (index) {
+                        layer.close(index);
+                        location.href = "@Url.Content("~/Login/index")";
+                    });
+                } else {
+                    layTip = layer.tips('Register Failed', '#repeatPassword');
+                }
+            }
+        });
+    }
+
+    function isExistValue(value, type) {
+        var flag = false;
+        $.ajax({
+            url: "@Url.Content("~/Login/IsExistValue")",
+            data: { value: value, type: type },
+            dataType: 'json', type: "POST", async: false,
+            success: function (result) {
+                if (result.errorCode == 200) {
+                    flag = true;
+                } else {
+                    flag = false;
+                }
+            }
+        });
+        return flag;
+    }
+
+    $("#FirstName,#LastName,#Username,#inputEmail,#inputPassword,#repeatPassword").focus(function () {
+        if (layTip) {
+            layer.close(layTip);
+        }
+    });
+
+    //enter
+    $("#repeatPassword").bind("keydown", function (event) {
+        var code = event.keycode ? parseInt(event.keycode) : parseInt(event.which);
+        if (isNaN(code)) return true;
+        if (code == 13) {
+            SubmitRegister();
+        }
+    });
+</script>

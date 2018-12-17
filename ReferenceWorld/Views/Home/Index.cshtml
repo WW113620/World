@@ -1,0 +1,175 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Index";
+}
+@{
+    bool isLogin = (bool)ViewBag.IsLogin;
+}
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>referral world</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link href="~/Content/app.v2.css" type="text/css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <style>
+        html,
+        body {
+            background: #000;
+            margin: 0;
+            padding: 0;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+        }
+
+        .btn-sm, .btn-xs {
+            padding: 5px 10px;
+            font-size: 14px;
+            line-height: 1.5;
+            border-radius: 3px;
+        }
+
+        .layout-btn {
+            position: relative;
+            float: right;
+            margin-right: 35px;
+            margin-top: 40px;
+        }
+
+        .registration-btn {
+            position: relative;
+            float: right;
+            margin-right: 35px;
+            margin-top: 40px;
+        }
+
+        .background-image {
+            position: absolute;
+            top: 28%;
+            left: 50%;
+            margin-left: -250px;
+            width: 500px;
+            text-align:center;
+        }
+
+        .footer-button-li {
+            position: absolute;
+            top: 80%;
+            left: 50%;
+            width: 80%;
+            margin-left: -40%;
+            text-align: center;
+        }
+
+            .footer-button-li .col-sm-3 {
+                cursor: pointer;
+            }
+
+        .background-text {
+            position: absolute;
+            top: 20%;
+            left: 50%;          
+            width: 800px;
+            margin-left: -400px;
+            text-align: center;
+        }
+
+            .background-text p {
+                color: white;
+                font-size: 20px;
+                font-family: 'HY NanGTJ';                
+            }
+    </style>
+</head>
+<body>
+    <canvas width="1251" height="920"></canvas>
+    <section id="content">
+        <div style="text-align:center">
+            @if (isLogin)
+            {
+                <div class="layout-btn" title="Layout">
+                    <div onclick="LayOut()" style="cursor:pointer;">
+                        <i class="fa fa-3x fa-power-off"></i>
+                        <h5 class="m-b m-t-lg">Layout</h5>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="registration-btn">
+                    <div onclick="Register()" style="cursor:pointer;" title="Register">
+                        <i class="fa fa-3x fa-users"></i>
+                        <h5 class="m-b m-t-lg">Register</h5>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="background-text">
+            <p style="color:white">Welcome to Referral World.  A one stop shop to all your reference needs…….. </p>
+        </div>
+        <div class="background-image">
+            <img src="../Images/Home_backgroundPage.png" alt="Reference World" style="width:290px;height:310px;" />
+        </div>
+       
+        <div class="row footer-button-li">
+            @if (isLogin)
+            {
+                <div class="col-sm-3" onclick="Member()" title="Member Profile">
+                    <i class="fa fa-3x fa-file-text-o"></i>
+                    <h5 class="text-uc m-b m-t-lg">Member Profile</h5>
+                </div>
+            }
+            else
+            {
+                <div class="col-sm-3" onclick="Login()" title="Login">
+                    <i class="fa fa-3x fa-user"></i>
+                    <h5 class="text-uc m-b m-t-lg">Login/Sign up</h5>
+                </div>
+            }
+
+            <div class="col-sm-3" onclick="Search()" title="Search">
+                <i class="fa fa-3x fa-search"></i>
+                <h5 class="text-uc m-b m-t-lg">Search</h5>
+            </div>
+            <div class="col-sm-3" onclick="About()" title="About Us">
+                <i class="fa fa-globe fa-3x icon-muted"></i>
+                <h5 class="text-uc m-b m-t-lg">About Us</h5>
+            </div>
+            <div class="col-sm-3" onclick="Contact()" title="Contact Us">
+                <i class="fa fa-envelope-o fa-3x icon-muted"></i>
+                <h5 class="text-uc m-b m-t-lg">Contact Us</h5>
+            </div>
+        </div>
+    </section>
+      
+    <script src="~/Scripts/app.v2.js"></script>
+    <script src="~/Scripts/createCanvas.js"></script>
+</body>
+</html>
+<script>
+    function Login() {
+        window.location.href = "@Url.Content("~/Login/Index")";
+    }
+    function Register() {
+        window.location.href = "@Url.Content("~/Login/Register")";
+    }
+    function Search() {
+        window.location.href = "@Url.Content("~/Search/Index")";
+    }
+    function About() {
+        window.location.href = "@Url.Content("~/Home/About")";
+    }
+    function Contact() {
+        window.location.href = "@Url.Content("~/Home/Contact")";
+    }
+    function Member() {
+        window.location.href = "@Url.Content("~/Member/Index")";
+    }
+    function LayOut() {
+        window.location.href = "@Url.Content("~/Login/LoginOut")";
+    }
+</script>

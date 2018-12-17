@@ -1,0 +1,149 @@
+﻿@model ReferenceWorld.Model.User
+@{
+    Layout = null;
+    ViewBag.Title = "Index";
+    long userId = Model.Id;
+    string avatarUrl = Url.Content("~/Upload/Avatar/") + Model.HeadImage;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>set avatar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link href="~/Content/app.v2.css" type="text/css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <!--[if lt IE 9]>
+    <script src="~/Scripts/ie/html5shiv.js" cache="false"></script>
+    <script src="~/Scripts/ie/respond.min.js" cache="false"></script>
+    <script src="~/Scripts/ie/excanvas.js" cache="false"></script>
+    <![endif]-->
+    <script src="~/Scripts/layer/layer.js"></script>
+    <script src="~/Scripts/public.js"></script>
+    <script type="text/javascript" src="~/Scripts/uploadPreview.js"></script>
+    <style>
+        #avatar {
+            width: 180px;
+            height: 180px;
+            border: 3px solid #fff;
+            border-radius: 100%;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            border: 1px solid #C3CBDE;
+        }
+
+        .site-demo-upload {
+            text-align: center;
+        }
+
+        html,
+        body {
+            background: #000;
+            margin: 0;
+            padding: 0;
+        }
+
+        canvas {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+         #content {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+           margin-left: -230px;
+           width: 460px;
+        }
+        .set-title {
+            color: #adbece;
+        }
+        .container a:hover {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <canvas width="1251" height="920"></canvas>
+        <section id="content" class="m-t-lg">
+            <div class="container aside-xxl">
+                <a class="navbar-brand block set-title" href="#">Set Your Own Avatar</a>
+                <section class="panel panel-default m-t-lg bg-white">
+                    <header class="panel-heading text-center"> <strong>avatar</strong> </header>
+                    <form class="panel-body wrapper-lg">
+                        <div class="form-group">
+                            <div class="site-demo-upload">
+                                @if (Model != null && !string.IsNullOrEmpty(Model.HeadImage))
+                                {
+                                    <img src="@avatarUrl" id="avatar" onerror="javascript: this.src = '@Url.Content("~/Images/default_img.jpg")';" alt="">
+                                }
+                                else
+                                {
+                                    <img src="@Url.Content("~/Images/default_img.jpg")" id="avatar" onerror="javascript: this.src = '@Url.Content("~/Images/default_img.jpg")';" alt="">
+                                }
+                            </div>
+                        </div>
+                        <div class="tp">
+                            <p class="text-muted text-center" ><small style="color:red;">The recommended image size is 200 * 200 pixels</small></p>
+                        </div>
+                        <div class="line line-dashed"></div>
+                        <a href="#" onclick="document.getElementById('uploadify').click();" class="btn btn-block btn-primary" style="margin-top: 30px;">Select a picture</a>
+                        <div class="line line-dashed"></div>
+                        <a href="#" onclick="SaveAvatar()" class="btn btn-default btn-block">Save avatar</a>
+                        <div style="height: 0px; overflow: hidden;">
+                            <input type="file" name="uploadify" id="uploadify" />
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </section>
+</div>
+
+    <script src="~/Scripts/createCanvas.js"></script>
+</body>
+</html>
+<script>
+    function SaveAvatar() {
+        var image = $("#uploadify").val();
+        if (image == "") {
+            alert("Select a picture first！");
+            return false;
+        }
+        var formData = new FormData();
+        formData.append('file', $('#uploadify')[0].files[0]);
+        formData.append('userId', "@userId");
+
+        var file = $('#uploadify').prop('files');
+        if (file.length) {
+            $.ajax({
+                url: "@Url.Content("~/PersonInfo/UploadAvatar")", data: formData, async: false, type: 'POST',
+                cache: false, processData: false,
+                contentType: false,
+                success: function (result) {
+                    if (result.errorCode == "200") {
+                        layer.msg("Save avatar successfully", { time: 800, offset: ['50%', '46%'] }, function (index) {
+                            layer.close(index);
+                             window.location.href = result.errorMes;
+                        });
+                    }
+                    else if (result.errorCode == "100") {
+                        alert("Select a picture first！");
+                        window.location.reload();
+                    }
+                    else {
+                        alert("Save avatar fail!");
+                        window.location.reload();
+                    }
+                }
+            });
+        }
+    }
+    /**upload片**/
+    $("#uploadify").uploadPreview({
+        Img: "avatar",
+        Width: 180, Height: 180,
+        ImgType: ["gif", "jpeg", "jpg", "bmp", "png"],
+    });
+</script>

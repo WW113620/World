@@ -1,0 +1,13 @@
+﻿@model List<ReferenceWorld.Model.Photos>
+
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var item in Model)
+    {
+        <div class="col-lg-3 col-sm-4 col-xs-6">
+            <a href="#" class="thumbnail">
+                < img src = "@item.Image"  alt = "" style = "height:180px;" />
+            </a>
+        </div>     
+    }
+}

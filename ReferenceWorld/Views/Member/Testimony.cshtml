@@ -1,0 +1,251 @@
+﻿
+@model ReferenceWorld.Model.Member
+@using ReferenceWorld.Common;
+@{
+    Layout = null;
+    ViewBag.Title = "Testimony";
+    long userId = Model.Id;
+    string avatarUrl = Url.Content("~/Upload/Avatar/") + Model.HeadImage;
+    string userGuid=(string)ViewBag.UserGuid;
+}
+<!DOCTYPE html>
+<html lang="en" class="app">
+<head>
+    <meta charset="utf-8" />
+    <title>Testimony</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link href="~/Content/app.v2.css" type="text/css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/common.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <!--[if lt IE 9]>
+    <script src="~/Scripts/ie/html5shiv.js" cache="false"></script>
+    <script src="~/Scripts/ie/respond.min.js" cache="false"></script>
+    <script src="~/Scripts/ie/excanvas.js" cache="false"></script>
+    <![endif]-->
+    <script src="~/Scripts/layer/layer.js"></script>
+    <script src="~/Scripts/public.js"></script>
+    <style>
+        .text-font {
+            margin-top: 15px;
+            line-height: 30px;
+            font-size: 20px;
+            font-weight: bold;
+            font-family: -webkit-pictograph;
+        }
+
+        a.underline {
+            text-decoration: underline;
+        }
+
+            a.underline:hover {
+                color: #280eea;
+            }
+
+        .margin-top30 {
+            margin-top: 30px;
+        }
+        #comments tr th{
+            font-size:15px;
+        }
+    </style>
+    <style>
+        table {
+            *border-collapse: collapse; /* IE7 and lower */
+            border-spacing: 0;
+            width: 100%;
+        }
+
+        .bordered {
+            border: solid #ccc 1px;
+            -moz-border-radius: 6px;
+            -webkit-border-radius: 6px;
+            border-radius: 6px;
+            -webkit-box-shadow: 0 1px 1px #ccc;
+            -moz-box-shadow: 0 1px 1px #ccc;
+            box-shadow: 0 1px 1px #ccc;
+        }
+
+            .bordered tr:hover {
+                background: #fbf8e9;
+                -o-transition: all 0.1s ease-in-out;
+                -webkit-transition: all 0.1s ease-in-out;
+                -moz-transition: all 0.1s ease-in-out;
+                -ms-transition: all 0.1s ease-in-out;
+                transition: all 0.1s ease-in-out;
+            }
+
+            .bordered td, .bordered th {
+                border-left: 1px solid #ccc;
+                border-top: 1px solid #ccc;
+                padding: 10px;
+                text-align: left;
+            }
+
+            .bordered th {
+                background-color: #dce9f9;
+                background-image: -webkit-gradient(linear, left top, left bottom, from(#ebf3fc), to(#dce9f9));
+                background-image: -webkit-linear-gradient(top, #ebf3fc, #dce9f9);
+                background-image: -moz-linear-gradient(top, #ebf3fc, #dce9f9);
+                background-image: -ms-linear-gradient(top, #ebf3fc, #dce9f9);
+                background-image: -o-linear-gradient(top, #ebf3fc, #dce9f9);
+                background-image: linear-gradient(top, #ebf3fc, #dce9f9);
+                -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, .8) inset;
+                -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, .8) inset;
+                box-shadow: 0 1px 0 rgba(255, 255, 255, .8) inset;
+                border-top: none;
+                text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
+            }
+
+                .bordered td:first-child, .bordered th:first-child {
+                    border-left: none;
+                }
+
+                .bordered th:first-child {
+                    -moz-border-radius: 6px 0 0 0;
+                    -webkit-border-radius: 6px 0 0 0;
+                    border-radius: 6px 0 0 0;
+                }
+
+                .bordered th:last-child {
+                    -moz-border-radius: 0 6px 0 0;
+                    -webkit-border-radius: 0 6px 0 0;
+                    border-radius: 0 6px 0 0;
+                }
+
+                .bordered th:only-child {
+                    -moz-border-radius: 6px 6px 0 0;
+                    -webkit-border-radius: 6px 6px 0 0;
+                    border-radius: 6px 6px 0 0;
+                }
+
+            .bordered tr:last-child td:first-child {
+                -moz-border-radius: 0 0 0 6px;
+                -webkit-border-radius: 0 0 0 6px;
+                border-radius: 0 0 0 6px;
+            }
+
+            .bordered tr:last-child td:last-child {
+                -moz-border-radius: 0 0 6px 0;
+                -webkit-border-radius: 0 0 6px 0;
+                border-radius: 0 0 6px 0;
+            }
+    </style>
+</head>
+<body>
+    <section class="vbox overflowDiv">
+        @{Html.RenderAction("PartHeader", "Member"); }
+        <section>
+            <section class="hbox stretch">
+                <!-- .aside -->
+                <aside class="bg-light lter aside-md hidden-print" id="nav"></aside>
+                <!-- /.aside -->
+                <section id="content">
+                    <section class="vbox bg-white">
+                        <header class="header b-b b-light hidden-print">
+                            <p class="p-title-font"><a href="@Url.Content("~/Member/Index/"+userGuid)" class="underline">Member Profile</a></p>
+                        </header>
+                        <section class="scrollable wrapper">
+                            <div class="row margin-top30">
+                                <div class="col-lg-12">
+                                    <table id="table" class="bordered">
+                                        <thead>
+                                            <tr>
+                                                <th width="180">Name</th>
+                                                <th width="200">Date</th>
+                                                <th width="400">Comments</th>
+                                                <th width="180">Rating</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{
+                                                var Commons = ViewBag.Commons as List<ReferenceWorld.Model.Comment>;
+                                                if (Commons != null && Commons.Count > 0)
+                                                {
+                                                    foreach (var item in Commons)
+                                                    {
+                                                        <tr class="active text-center">
+                                                            <td>@item.CommentName</td>
+                                                            <td>@item.CreateTime.ToShortDateString()</td>
+                                                            <td>@item.Content</td>
+                                                            <td>@item.Star</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+
+                                    @*<table class="table table-striped" id="comments-table">
+                                        <tr class="danger">
+                                            <th class="text-center" width="180">Name</th>
+                                            <th class="text-center" width="200">Date</th>
+                                            <th class="text-center">Comments</th>
+                                            <th class="text-center" width="140">Rating</th>
+                                        </tr>
+                                        <tbody>
+                                            @{
+                                                var Commons = ViewBag.Commons as List<ReferenceWorld.Model.Comment>;
+                                                if (Commons != null && Commons.Count > 0)
+                                                {
+                                                    foreach (var item in Commons)
+                                                    {
+                                                        <tr class="active text-center">
+                                                            <td>@item.CommentName</td>
+                                                            <td>@item.CreateTime.ToShortDateString()</td>
+                                                            <td>@item.Content</td>
+                                                            <td>@item.Star</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>*@
+                                </div>
+                            </div>                            
+                            <div class="well m-t" style="margin-top: 70px;text-align: center;">
+                                <div class="row">
+                                    <div class="col-sm-3" onclick="Home()" style="cursor:pointer;" title="Home">
+                                        <i class="fa fa-3x fa-user"></i>
+                                        <h5 class="text-uc m-b m-t-lg">Home</h5>
+                                    </div>
+                                    <div class="col-sm-3" onclick="Search()" style="cursor:pointer;" title="Search">
+                                        <i class="fa fa-3x fa-search"></i>
+                                        <h5 class="text-uc m-b m-t-lg">Search</h5>
+                                    </div>
+                                    <div class="col-sm-3" onclick="About()" style="cursor:pointer;" title="About Us">
+                                        <i class="fa fa-globe fa-3x icon-muted"></i>
+                                        <h5 class="text-uc m-b m-t-lg">About Us</h5>
+                                    </div>
+                                    <div class="col-sm-3" onclick="Contact()" style="cursor:pointer;" title="Contact Us">
+                                        <i class="fa fa-envelope-o fa-3x icon-muted"></i>
+                                        <h5 class="text-uc m-b m-t-lg">Contact Us</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </section>
+                    <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a>
+                </section>
+                <aside class="bg-light lter aside-md hidden-print" id="nav"></aside>
+
+            </section>
+        </section>
+    </section>
+</body>
+</html>
+<script>
+    function Home() {
+        window.location.href = "@Url.Content("~/Home/Index")";
+    }
+    function Search() {
+        window.location.href = "@Url.Content("~/Search/Index")";
+    }
+    function About() {
+        window.location.href = "@Url.Content("~/Home/About")";
+    }
+    function Contact() {
+        window.location.href = "@Url.Content("~/Home/Contact")";
+    }
+</script>
+

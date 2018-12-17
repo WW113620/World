@@ -1,0 +1,13 @@
+E:\WorkProject_New\World_SVN\World\ConsoleToImage\bin\Debug\ConsoleToImage.exe
+E:\WorkProject_New\World_SVN\World\ConsoleToImage\bin\Debug\ConsoleToImage.pdb
+E:\WorkProject_New\World_SVN\World\ConsoleToImage\bin\Debug\PDFLibNet.dll
+E:\WorkProject_New\World_SVN\World\ConsoleToImage\obj\Debug\ConsoleToImage.exe
+E:\WorkProject_New\World_SVN\World\ConsoleToImage\obj\Debug\ConsoleToImage.pdb
+E:\WorkProject_New\World_SVN\World\ConsoleToImage\bin\Debug\ConsoleToImage.exe.config
+E:\WorkProject_New\World_SVN\World\ConsoleToImage\obj\Debug\Interop.PDFMAKERAPILib.dll
+E:\WorkProject_New\World_SVN\World\ConsoleToImage\obj\Debug\ConsoleToImage.csproj.ResolveComReference.cache
+E:\WorkProject_New\World_SVN\World\ConsoleToImage\bin\Debug\ephtmltopdf.dll
+E:\WorkProject_New\World_SVN\World\ConsoleToImage\bin\Debug\TuesPechkin.dll
+E:\WorkProject_New\World_SVN\World\ConsoleToImage\bin\Debug\TuesPechkin.Wkhtmltox.Win64.dll
+E:\WorkProject_New\World_SVN\World\ConsoleToImage\obj\Debug\ConsoleToImage.csprojResolveAssemblyReference.cache
+E:\WorkProject_New\World_SVN\World\ConsoleToImage\bin\Debug\Interop.PDFMAKERAPILib.dll
